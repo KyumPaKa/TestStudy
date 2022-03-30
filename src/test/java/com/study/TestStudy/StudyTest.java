@@ -2,6 +2,9 @@ package com.study.TestStudy;
 
 import org.assertj.core.api.Assert;
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.condition.*;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import java.time.Duration;
 import java.util.function.Supplier;
@@ -72,8 +75,15 @@ public class StudyTest {
         });
     }
 
-    @Test
+//    @Test
     @DisplayName("조건에 따른 테스트")
+//    @EnabledOnOs(OS.MAC)
+//    @DisabledOnOs(OS.WINDOWS)
+//    @EnabledOnJre({JRE.JAVA_8, JRE.JAVA_9})
+//    @DisabledOnJre({JRE.JAVA_8, JRE.JAVA_9})
+//    @EnabledIfEnvironmentVariable(named = "env", matches = "LOCAL")
+//    @Tag("fast")
+    @FastTest
     void option_test() {
         String env = "LOCAL";
         assumeTrue("LOCAL".equals(env));
@@ -88,6 +98,19 @@ public class StudyTest {
             Study study = new Study(10);
             org.assertj.core.api.Assertions.assertThat(study.getLimit()).isGreaterThan(0);
         });
+    }
+
+    @DisplayName("반복 테스트")
+    @RepeatedTest(value = 10, name = "{displayName}, {currentRepetition}/{totalRepetitions}")
+    void repeatedTest(RepetitionInfo info) {
+        System.out.println("test " + info.getCurrentRepetition() + " / " + info.getTotalRepetitions());
+    }
+
+    @DisplayName("파라미터 테스트")
+    @ParameterizedTest(name = "{index} {displayName} message={0}")
+    @ValueSource(strings = {"날씨가", "너무", "좋아요"})
+    void parameterTest(String message) {
+        System.out.println(message);
     }
 
     @BeforeAll

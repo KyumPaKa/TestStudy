@@ -58,7 +58,30 @@
 {displayName} : 정의된 테스트 이름
 {index} : 제공된 파라미터의 인덱스
 {숫자} : `@ValueSource`를 통해 제공된 파라미터 값
-
+- 인자 값소스
+  - @NullSource
+  파라미터에 null을 제공하여 테스트 실행
+  - @EmptySource
+  파라미터에 공백을 제공하여 테스트 실행
+  - @NullAndEmptySource
+  파라미터에 null, 공백을 제공하여 테스트 실행
+  - @EnumSource
+  - @MethodSource
+  - @CvsSource
+  - @CvsFileSource
+  - @ArgumentSource
+- 인자 값 타입 변환
+  - 암묵적인 타입 변환
+  - 명시적인 타입 변환
+    - `SimpleArgumentConverter` 상속 받은 구현체 사용, @ConvertWith 사용
+  - 인자 값 조합
+    - `ArgumentsAccessor` 인자값 받기
+    - `ArgumentsAggregator` 인터페이스 구현, @AggregateWith 사용<br>
+    제약조건: public class, static class 이어야만 함
+- @TestInstance <br>
+**각 테스트는 테스트(메서드) 단위 인스턴스를 사용함**
+인스턴스 값을 변경하여 인스턴스 Lifecycle을 변경 가능 <br>
+Lifecycle이 PER_CLASS 인 경우 `@BeforeAll`, `@AfterAll` 이 static 일 필요 없음
 - 어노테이션을 커스텀하여 일괄 적용가능함
 
 ### Assertions 메소드 정리
@@ -85,4 +108,18 @@ AssertJ, Hemcrest, Truth 등의 라이브러리를 활용할 수도 있음
 파라미터 값이 true인 경우 정의된 함수 실행
 - 등등 기타함수가 다양하게 존재..
 
-------------
+### 테스트 순서
+실행할 테스트 메소드 특정한 순서에 의해 실행되지만, 어떻게 그 순서를 정하는지 의도적으로 분명하지 않음<br>
+- `@TestMethodOrder`을 사용가능
+- MethodOrderer 구현체를 설정
+
+### properties 적용
+- 테스트 인스턴스 라이프사이클 설정 <br>
+junit.jupiter.testinstance.lifecycle.default = per_class
+- 확장팩 자동 감지 기능 <br>
+junit.jupiter.extensions.autodetection.enabled = true
+- @Disabled 무시하고 실행하기 <br>
+junit.jupiter.conditions.deactivate = org.junit.*DisabledCondition <br>
+junit.jupiter.conditions.deactivate = org.junit.*DisabledOnOsCondition .. 등긍 무시하고 싶은 패키지경로 입력
+- 테스트 이름 표기 전략 설정 <br>
+junit.jupiter.displayname.generator.default = org.junit.jupiter.api.DisplayNameGenerator$ReplaceUnderscores

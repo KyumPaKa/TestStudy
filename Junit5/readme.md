@@ -123,3 +123,31 @@ junit.jupiter.conditions.deactivate = org.junit.*DisabledCondition <br>
 junit.jupiter.conditions.deactivate = org.junit.*DisabledOnOsCondition .. 등긍 무시하고 싶은 패키지경로 입력
 - 테스트 이름 표기 전략 설정 <br>
 junit.jupiter.displayname.generator.default = org.junit.jupiter.api.DisplayNameGenerator$ReplaceUnderscores
+
+### 확장모델
+Junit4 -> @RunWith(Runner), TestRule, MethodRule <br>
+Junit5 -> Extension
+##### 확장 등록 방법
+- 선언적 등록 @ExtendWith
+Class에 선언
+- 프로그래밍 등록 @RegisterExtension
+field에 선언, static이어야 함
+- 자동 등록 자바 ServiceLoader 이용
+##### 확장 만드는 방법
+참고사이트 - https://junit.org/junit5/docs/current/user-guide/#extensions  <br>
+
+### Junit4 마이그레이션
+junit-vintage-engine을 의존성으로 추가하면, Junit5의 junit-platform으로 Junit3, Junit4로 작성된 테스트 실행 가능
+- `@Rule`은 기본적으로 지원하지 않지만, junit-jupiter-migrationsuport 모듈이 제공하는 `@EnableRuleMigrationSupport`를 사용하면 다음 타입의 Rule 지원
+  - ExternalReource
+  - Verifier
+  - ExpectedException
+
+| Junit4  | Junit5  |
+
+| Junit4                                     | Junit5                                         |
+|:-------------------------------------------|:-----------------------------------------------|
+| @Category(Class)                           | @Tag(String)                                   |
+| @RunWith, @Rule, @ClassRule                | @ExtendWith, @RegisterExtension                |
+| @Ignore                                    | @Diabled                                       |
+| @Before, @After, @BeforeClass, @AfterClass | @BeforeEach, @AfterEach, @BeforeAll, @AfterAll |

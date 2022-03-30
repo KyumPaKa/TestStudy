@@ -1,7 +1,9 @@
 package com.study.TestStudy;
 
 import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ParameterContext;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.aggregator.AggregateWith;
 import org.junit.jupiter.params.aggregator.ArgumentsAccessor;
@@ -21,9 +23,13 @@ import static org.junit.jupiter.api.Assumptions.*;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 //@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
+//@ExtendWith(FindSlowTestExtension.class)
 public class StudyTest {
 
     int value = 1;
+
+    @RegisterExtension
+    static FindSlowTestExtension findSlowTestExtension = new FindSlowTestExtension(1000L);
 
     @Test
     @DisplayName("스터디")
@@ -46,7 +52,8 @@ public class StudyTest {
 //    @Disabled
     @Test
     @DisplayName("스터디 다시")
-    void create_new_study_again() {
+    void create_new_study_again() throws InterruptedException {
+        Thread.sleep(1005L);
         System.out.println("create_new_study_again");
         Study study = new Study(10);
         assertAll(

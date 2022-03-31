@@ -34,6 +34,7 @@ public void Services_should_only_be_accessed_by_Controllers() {
 - JUnit 5 확장팩 제공
   - @AnalyzeClasses: 클래스를 읽어들여서 확인할 패키지 설정
   - @ArchTest: 확인할 규칙 정의
+- 패키지 의존성 확인
 ```
 @AnalyzeClasses(packagesOf = App.class)
 public class ArchTests {
@@ -54,5 +55,27 @@ public class ArchTests {
     @ArchTest
     ArchRule freeOfCycles = slices().matching("..inflearnthejavatest.(*)..")
     .should().beFreeOfCycles();
+}
+```
+- 클래스 의존성 확인
+```
+@AnalyzeClasses(packagesOf = App.class)
+public class ArchClassTests {
+
+    @ArchTest
+    ArchRule controllerClassRule = classes().that().haveSimpleNameEndingWith("Controller")
+            .should().accessClassesThat().haveSimpleNameEndingWith("Service")
+            .orShould().accessClassesThat().haveSimpleNameEndingWith("Repository");
+
+    @ArchTest
+    ArchRule repositoryClassRule = noClasses().that().haveSimpleNameEndingWith("Repository")
+            .should().accessClassesThat().haveSimpleNameEndingWith("Service");
+
+    @ArchTest
+    ArchRule studyClassesRule = classes().that().haveSimpleNameStartingWith("Study")
+            .and().areNotEnums()
+            .and().areNotAnnotatedWith(Entity.class)
+            .should().resideInAnyPackage("..study..");
+
 }
 ```

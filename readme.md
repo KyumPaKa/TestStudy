@@ -6,6 +6,10 @@
 
 <a href="https://github.com/KyumPaKa/TestStudy/tree/master/Docker">Docker</a>
 
+<a href="https://github.com/KyumPaKa/TestStudy/tree/master/Jmeter">성능테스트(Jmeter)</a>
+
+<a href="https://github.com/KyumPaKa/TestStudy/tree/master/ChaosMonkey">운영 이슈 테스트(ChaosMonkey)</a>
+
 - 추후 재학습 예정
   - Docker
   - Jmeter

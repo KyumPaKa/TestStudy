@@ -1,7 +1,6 @@
 package com.study.TestStudy;
 
 import org.junit.jupiter.api.*;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ParameterContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -34,17 +33,17 @@ public class StudyTest {
     @Test
     @DisplayName("스터디")
     void create_new_study() {
-        Study study = new Study(10);
+        StudySample study = new StudySample(10);
         assertNotNull(study);
         System.out.println("create_new_study");
-        assertEquals(StudyStatus.Draft, study.getStatus(), "스터디를 처음만들면 상태값이 DRAFT여야 한다.");
-        assertEquals(StudyStatus.Draft, study.getStatus(), new Supplier<String>() {
+        assertEquals(StudyStatus.DRAFT, study.getStatus(), "스터디를 처음만들면 상태값이 DRAFT여야 한다.");
+        assertEquals(StudyStatus.DRAFT, study.getStatus(), new Supplier<String>() {
             @Override
             public String get() {
                 return "스터디를 처음만들면 상태값이 DRAFT여야 한다.";
             }
         });
-        assertEquals(StudyStatus.Draft, study.getStatus(), () -> "스터디를 처음만들면 상태값이 DRAFT여야 한다.");
+        assertEquals(StudyStatus.DRAFT, study.getStatus(), () -> "스터디를 처음만들면 상태값이 DRAFT여야 한다.");
         assertTrue(1 < 2);
         assertTrue(study.getLimit() > 0, "스터디 최대 참석인원은 0보다 커야한다.");
     }
@@ -55,10 +54,10 @@ public class StudyTest {
     void create_new_study_again() throws InterruptedException {
         Thread.sleep(1005L);
         System.out.println("create_new_study_again");
-        Study study = new Study(10);
+        StudySample study = new StudySample(10);
         assertAll(
                 () -> assertNotNull(study),
-                () -> assertEquals(StudyStatus.Draft, study.getStatus(), () -> "스터디를 처음만들면 상태값이 DRAFT여야 한다."),
+                () -> assertEquals(StudyStatus.DRAFT, study.getStatus(), () -> "스터디를 처음만들면 상태값이 DRAFT여야 한다."),
                 () -> assertTrue(study.getLimit() > 0, "스터디 최대 참석인원은 0보다 커야한다.")
         );
     }
@@ -67,7 +66,7 @@ public class StudyTest {
     @DisplayName("에러발생 테스트")
     void create_error_test() {
         System.out.println("create_error_test");
-        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> new Study(-1));
+        IllegalStateException exception = assertThrows(IllegalStateException.class, () -> new StudySample(-1));
         String message = exception.getMessage();
         assertEquals("limit은 0보다 커야합니다.", message);
     }
@@ -77,7 +76,7 @@ public class StudyTest {
     void create_timeout_test() {
         System.out.println("create_timeout_test");
         assertTimeout(Duration.ofMillis(500), () -> {
-            new Study(10);
+            new StudySample(10);
             Thread.sleep(300);
         });
     }
@@ -87,7 +86,7 @@ public class StudyTest {
     void create_timeoutPreemptively_test() {
         System.out.println("create_timeoutPreemptively_test");
         assertTimeoutPreemptively(Duration.ofMillis(500), () -> {
-            new Study(10);
+            new StudySample(10);
             Thread.sleep(300);
         });
     }
@@ -106,13 +105,13 @@ public class StudyTest {
         assumeTrue("LOCAL".equals(env));
         assumingThat("LOCAL".equals(env), () -> {
             System.out.println("LOCAL");
-            Study study = new Study(10);
+            StudySample study = new StudySample(10);
             org.assertj.core.api.Assertions.assertThat(study.getLimit()).isGreaterThan(0);
         });
 
         assumingThat("DEV".equals(env), () -> {
             System.out.println("DEV");
-            Study study = new Study(10);
+            StudySample study = new StudySample(10);
             org.assertj.core.api.Assertions.assertThat(study.getLimit()).isGreaterThan(0);
         });
     }
@@ -135,40 +134,40 @@ public class StudyTest {
 
     @ParameterizedTest
     @ValueSource(ints = {10, 20, 30})
-    void parameterConvertTest(@ConvertWith(StudyConverter.class) Study study) {
+    void parameterConvertTest(@ConvertWith(StudyConverter.class) StudySample study) {
         System.out.println(study.getLimit());
     }
 
         static class StudyConverter extends SimpleArgumentConverter {
         @Override
         protected Object convert(Object source, Class<?> targetType) throws ArgumentConversionException {
-            assertEquals(Study.class, targetType, "can not convert to Study");
-            return new Study(Integer.parseInt(source.toString()));
+            assertEquals(StudySample.class, targetType, "can not convert to Study");
+            return new StudySample(Integer.parseInt(source.toString()));
         }
     }
 
     @ParameterizedTest
     @CsvSource({"10, '자바'", "20, '스프링'"})
     void objectConvertTest(Integer limit, String name) {
-        System.out.println(new Study(limit, name));
+        System.out.println(new StudySample(limit, name));
     }
 
     @ParameterizedTest
     @CsvSource({"10, '자바'", "20, '스프링'"})
     void objectConvertTest2(ArgumentsAccessor argumentsAccessor) {
-        System.out.println(new Study(argumentsAccessor.getInteger(0), argumentsAccessor.getString(1)));
+        System.out.println(new StudySample(argumentsAccessor.getInteger(0), argumentsAccessor.getString(1)));
     }
 
     @ParameterizedTest
     @CsvSource({"10, '자바'", "20, '스프링'"})
-    void objectConvertTest3(@AggregateWith(StudyAggregator.class) Study study) {
+    void objectConvertTest3(@AggregateWith(StudyAggregator.class) StudySample study) {
         System.out.println(study);
     }
 
     static class StudyAggregator implements ArgumentsAggregator {
         @Override
         public Object aggregateArguments(ArgumentsAccessor accessor, ParameterContext context) throws ArgumentsAggregationException {
-            return new Study(accessor.getInteger(0), accessor.getString(1));
+            return new StudySample(accessor.getInteger(0), accessor.getString(1));
         }
     }
 

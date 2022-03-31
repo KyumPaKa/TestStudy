@@ -1,20 +1,21 @@
 package com.study.TestStudy;
 
-public class Study {
+public class StudySample {
 
-    private StudyStatus status = StudyStatus.Draft;
+    private StudyStatus status = StudyStatus.DRAFT;
 
     private int limit;
 
     private String name;
 
-    public Study(int limit) {
+    public StudySample(int limit) {
         if(limit < 0) {
             throw new IllegalStateException("limit은 0보다 커야합니다.");
         }
         this.limit = limit;
     }
-    public Study(int limit, String name) {
+
+    public StudySample(int limit, String name) {
         if(limit < 0) {
             throw new IllegalStateException("limit은 0보다 커야합니다.");
         }

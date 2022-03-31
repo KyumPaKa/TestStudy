@@ -10,6 +10,8 @@
 
 <a href="https://github.com/KyumPaKa/TestStudy/tree/master/ChaosMonkey">운영 이슈 테스트(ChaosMonkey)</a>
 
+<a href="https://github.com/KyumPaKa/TestStudy/tree/master/ArchUnit">아키텍처 테스트(ArchUnit)</a>
+
 - 추후 재학습 예정
   - Docker
   - Jmeter

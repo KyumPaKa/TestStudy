@@ -79,3 +79,6 @@ public class ArchClassTests {
 
 }
 ```
+- Freezing Arch Rules 과 같이 이미 깨진 아키텍처를 두고 이후 깨지는 아키텍처에 대해서만 방지 가능
+- PlantUML 로 작성된 다이어그램을 기반으로 룰 확인 가능
+- ...
